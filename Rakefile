@@ -1,25 +1,21 @@
-# encoding: UTF-8
-require 'rubygems'
+#!/usr/bin/env rake
 begin
   require 'bundler/setup'
 rescue LoadError
   puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
 end
 
-require 'rake'
-#require 'rdoc/task'
+ENGINE_PATH = File.dirname(__FILE__)
+APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
 
-require 'rspec/core'
-require 'rspec/core/rake_task'
+if File.exists?(APP_RAKEFILE)
+  load 'rails/tasks/engine.rake'
+end
 
-RSpec::Core::RakeTask.new(:spec)
+require "refinerycms-testing"
+Refinery::Testing::Railtie.load_tasks
+Refinery::Testing::Railtie.load_dummy_tasks(ENGINE_PATH)
 
-task :default => :spec
+load File.expand_path('../tasks/testing.rake', __FILE__)
+load File.expand_path('../tasks/rspec.rake', __FILE__)
 
-#RDoc::Task.new(:rdoc) do |rdoc|
-  #rdoc.rdoc_dir = 'rdoc'
-  #rdoc.title    = 'Refinerycms-wordpress-import'
-  #rdoc.options << '--line-numbers' << '--inline-source'
-  #rdoc.rdoc_files.include('README.rdoc')
-  #rdoc.rdoc_files.include('lib/**/*.rb')
-#end

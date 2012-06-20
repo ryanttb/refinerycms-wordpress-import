@@ -11,7 +11,7 @@ module Refinery
       end
 
       def inspect
-        "WordPress::Page(#{post_id}): #{title}"     
+        "WordPress::Page(#{post_id}): #{title}"
       end
 
       def title
@@ -27,10 +27,10 @@ module Refinery
 
         # remove all tags inside <pre> that simple_format created
         # TODO: replace format_paragraphs with a method, that ignores pre-tags
-        formatted.gsub!(/(<pre.*?>)(.+?)(<\/pre>)/m) do |match| 
+        formatted.gsub!(/(<pre.*?>)(.+?)(<\/pre>)/m) do |match|
           "#{$1}#{strip_tags($2)}#{$3}"
         end
-          
+
         formatted
       end
 
@@ -68,14 +68,14 @@ module Refinery
       end
 
       def to_refinery
-        page = ::Page.create!(:id => post_id, :title => title, 
+        page = Refinery::Page.create!(:id => post_id, :title => title,
           :created_at => post_date, :draft => draft?)
 
         page.parts.create(:title => 'Body', :body => content_formatted)
         page
       end
 
-      private 
+      private
 
       def format_paragraphs(text, html_options={})
         # WordPress doesn't export <p>-Tags, so let's run a simple_format over
@@ -83,7 +83,7 @@ module Refinery
         # inspired by the simple_format rails helper
         text = ''.html_safe if text.nil?
         start_tag = tag('p', html_options, true)
-        
+
         text.gsub!(/\r\n?/, "\n")                    # \r\n and \r -> \n
         text.gsub!(/\n\n+/, "</p>\n\n#{start_tag}")  # 2+ newline  -> paragraph
         text.insert 0, start_tag
@@ -96,10 +96,10 @@ module Refinery
         # In WordPress you can (via a plugin) enclose code in [lang][/lang]
         # blocks, which are converted to a <pre>-tag with a class corresponding
         # to the language.
-        # 
+        #
         # Example:
-        # [ruby]p "Hello World"[/ruby] 
-        # -> <pre class="brush: ruby">p "Hello world"</pre> 
+        # [ruby]p "Hello World"[/ruby]
+        # -> <pre class="brush: ruby">p "Hello world"</pre>
         text.gsub(/\[(\w+)\](.+?)\[\/\1\]/m, '<pre class="brush: \1">\2</pre>')
       end
     end

@@ -24,10 +24,9 @@ module Refinery
       end
 
       def to_refinery
-        user = User.find_or_initialize_by_username_and_email(login, email)
-        unless user.persisted?
-          user.password = 'password'
-          user.password_confirmation = 'password'
+        user = Refinery::User.find_for_database_authentication(:login => login, :email => email)
+        unless user
+          user = Refinery::User.new(:login => login, :email => email, :password => 'password', :password_confirmation => 'password')
           user.save
         end
         user

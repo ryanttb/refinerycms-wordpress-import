@@ -9,7 +9,7 @@ module Refinery
           "category[@domain='tag']"
         end
 
-        node.xpath(path).collect do |tag_node| 
+        node.xpath(path).collect do |tag_node|
           Tag.new(tag_node.text)
         end
       end
@@ -31,17 +31,18 @@ module Refinery
       end
 
       def to_refinery
-        user = ::User.find_by_username(creator) || ::User.first
+        user = ::Refinery::User.find_by_login(creator) || ::Refinery::User.first
         raise "Referenced User doesn't exist! Make sure the authors are imported first." \
           unless user
 
         begin
-          post = ::BlogPost.new :title => title, :body => content_formatted,
-            :draft => draft?, :published_at => post_date, :created_at => post_date,
+          post = ::Refinery::Blog::Post.new :title => title, :body => content_formatted,
+            :draft => draft?, :published_at => post_date,
             :user_id => user.id, :tag_list => tag_list
+          post.created_at = post_date
           post.save!
 
-          ::BlogPost.transaction do
+          ::Refinery::Blog::Post.transaction do
             categories.each do |category|
               post.categories << category.to_refinery
             end
@@ -65,16 +66,16 @@ module Refinery
       def self.create_blog_page_if_necessary
         # refinerycms wants a page at /blog, so let's make sure there is one
         # taken from the original db seeds from refinery-blog
-        unless ::Page.where("link_url = ?", '/blog').exists?
-          page = ::Page.create(
+        unless Refinery::Page.where("link_url = ?", '/blog').exists?
+          page = Refinery::Page.create(
             :title => "Blog",
             :link_url => "/blog",
             :deletable => false,
-            :position => ((::Page.maximum(:position, :conditions => {:parent_id => nil}) || -1)+1),
+            :position => ((Refinery::Page.maximum(:position, :conditions => {:parent_id => nil}) || -1)+1),
             :menu_match => "^/blogs?(\/|\/.+?|)$"
           )
 
-          ::Page.default_parts.each do |default_page_part|
+          Refinery::Page.default_parts.each do |default_page_part|
             page.parts.create(:title => default_page_part, :body => nil)
           end
         end

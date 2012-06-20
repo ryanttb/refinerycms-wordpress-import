@@ -59,7 +59,7 @@ describe Refinery::WordPress::Attachment, :type => :model do
     specify { attachment.should_not be_an_image }
 
     describe '#to_refinery' do
-      before do 
+      before do
         @resource = attachment.to_refinery
       end
 

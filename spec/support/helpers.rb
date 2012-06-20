@@ -1,7 +1,7 @@
 module Refinery::WordPress::SpecHelpers
   def test_dump
     file_name = File.expand_path(File.join(File.dirname(__FILE__), '../fixtures/wordpress_dump.xml'))
-    Refinery::WordPress::Dump.new(file_name) 
+    Refinery::WordPress::Dump.new(file_name)
   end
 end
 

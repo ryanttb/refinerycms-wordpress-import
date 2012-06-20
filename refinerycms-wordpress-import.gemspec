@@ -1,22 +1,23 @@
 # Provide a simple gemspec so you can easily use your enginex
 # project in your rails apps through git.
 Gem::Specification.new do |s|
+  s.platform          = Gem::Platform::RUBY
   s.name        = "refinerycms-wordpress-import"
   s.summary     = "Import WordPress XML dumps into refinerycms(-blog)."
   s.description = "This gem imports a WordPress XML dump into refinerycms (Page, User) and refinerycms-blog (BlogPost, BlogCategory, Tag, BlogComment)"
-  s.version     = "0.4.0"
-  s.date        = "2011-06-13"
+  s.version     = "0.4.1b"
+  s.date        = "2012-06-18"
 
-  s.authors     = ['Marc Remolt']
+  s.authors     = ['Marc Remolt', 'Marc Lee']
   s.email       = 'marc.remolt@googlemail.com'
   s.homepage    = 'https://github.com/mremolt/refinerycms-wordpress-import'
 
-  s.add_dependency 'bundler', '~> 1.0'
-  s.add_dependency 'refinerycms', '~> 1.0.0'
-  s.add_dependency 'refinerycms-blog', '~> 1.6.2'
+  s.add_dependency 'refinerycms-core', '~> 2.0.5'
+  s.add_dependency 'refinerycms-blog', '~> 2.0.4'
   s.add_dependency 'nokogiri', '~> 1.5.0'
 
-  s.add_development_dependency 'rspec-rails'
+  # Development dependencies (usually used for testing)
+  s.add_development_dependency 'refinerycms-testing', '~> 2.0.3'
   s.add_development_dependency 'database_cleaner'
 
   s.files = Dir["{app,lib,config}/**/*"] + ["MIT-LICENSE", "Rakefile", "Gemfile", "README.rdoc"]

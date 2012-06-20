@@ -3,7 +3,7 @@ module Refinery
     class Comment
       attr_reader :node
 
-      def initialize(node) 
+      def initialize(node)
         @node = node
       end
 
@@ -31,12 +31,12 @@ module Refinery
         node.xpath('wp:comment_approved').text.to_i == 1
       end
 
-      def ==(other) 
+      def ==(other)
         (email == other.email) && (date == other.date) && (content == other.content)
       end
 
       def to_refinery
-        comment = BlogComment.new :name => author, :email => email
+        comment = ::Refinery::Blog::Comment.new :name => author, :email => email
 
         comment.body = content
         comment.created_at = date

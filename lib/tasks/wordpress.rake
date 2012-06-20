@@ -5,7 +5,7 @@ namespace :wordpress do
   task :reset_blog do
     Rake::Task["environment"].invoke
 
-    %w(taggings tags blog_comments blog_categories blog_categories_blog_posts 
+    %w(taggings tags blog_comments blog_categories blog_categories_blog_posts
        blog_posts).each do |table_name|
       p "Truncating #{table_name} ..."
       ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
@@ -19,14 +19,14 @@ namespace :wordpress do
     dump = Refinery::WordPress::Dump.new(params[:file_name])
 
     dump.authors.each(&:to_refinery)
-    
+
     only_published = ENV['ONLY_PUBLISHED'] == 'true' ? true : false
     dump.posts(only_published).each(&:to_refinery)
 
     Refinery::WordPress::Post.create_blog_page_if_necessary
 
     ENV["MODEL"] = 'BlogPost'
-    Rake::Task["friendly_id:redo_slugs"].invoke
+    #Rake::Task["friendly_id:redo_slugs"].invoke
     ENV.delete("MODEL")
   end
 
@@ -58,7 +58,7 @@ namespace :wordpress do
 
     # After all pages are persisted we can now create the parent - child
     # relationships. This is necessary, as WordPress doesn't dump the pages in
-    # a correct order. 
+    # a correct order.
     dump.pages(only_published).each do |dump_page|
       page = ::Page.find(dump_page.post_id)
       page.parent_id = dump_page.parent_id
@@ -66,12 +66,12 @@ namespace :wordpress do
     end
 
     Refinery::WordPress::Post.create_blog_page_if_necessary
-        
+
     ENV["MODEL"] = 'Page'
     Rake::Task["friendly_id:redo_slugs"].invoke
     ENV.delete("MODEL")
   end
-  
+
   desc "reset cms tables and then import cms data from a WordPress XML dump"
   task :reset_and_import_pages, :file_name do |task, params|
     Rake::Task["environment"].invoke
@@ -94,10 +94,10 @@ namespace :wordpress do
   task :import_and_replace_media, :file_name do |task, params|
     Rake::Task["environment"].invoke
     dump = Refinery::WordPress::Dump.new(params[:file_name])
-    
+
     attachments = dump.attachments.each(&:to_refinery)
-    
-    # parse all created BlogPost and Page bodys and replace the old wordpress media uls 
+
+    # parse all created BlogPost and Page bodys and replace the old wordpress media uls
     # with the newly created ones
     attachments.each do |attachment|
       attachment.replace_url
