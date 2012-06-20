@@ -4,11 +4,13 @@ module Refinery
       attr_reader :doc
 
       def initialize(file_name)
+        raise "No file specified to import!" if file_name.nil?
+
         file_name = File.expand_path(file_name)
 
         raise "Given file '#{file_name}' no file or not readable." \
           unless File.file?(file_name) && File.readable?(file_name)
-        
+
         file = File.open(file_name)
         @doc = Nokogiri::XML(file)
       end

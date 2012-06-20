@@ -5,7 +5,7 @@ namespace :wordpress do
   task :reset_blog do
     Rake::Task["environment"].invoke
 
-    %w(taggings tags refinery_blog_comments refinery_blog_categories refinery_blog_categories_blog_posts refinery_blog_posts).each do |table_name|
+    %w(refinery_taggings refinery_tags refinery_blog_comments refinery_blog_categories refinery_blog_categories_blog_posts refinery_blog_posts).each do |table_name|
       p "Truncating #{table_name} ..."
       ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
     end
@@ -15,6 +15,11 @@ namespace :wordpress do
   desc "import blog data from a Refinery::WordPress XML dump"
   task :import_blog, :file_name do |task, params|
     Rake::Task["environment"].invoke
+
+    if params[:file_name].nil?
+      raise "Please specifiy file_name as a rake parameter (use [filename] after task_name...)"
+    end
+
     dump = Refinery::WordPress::Dump.new(params[:file_name])
 
     dump.authors.each(&:to_refinery)
@@ -23,10 +28,6 @@ namespace :wordpress do
     dump.posts(only_published).each(&:to_refinery)
 
     Refinery::WordPress::Post.create_blog_page_if_necessary
-
-    ENV["MODEL"] = 'BlogPost'
-    #Rake::Task["friendly_id:redo_slugs"].invoke
-    ENV.delete("MODEL")
   end
 
   desc "reset blog tables and then import blog data from a Refinery::WordPress XML dump"
@@ -41,7 +42,7 @@ namespace :wordpress do
   task :reset_pages do
     Rake::Task["environment"].invoke
 
-    %w(page_part_translations page_translations page_parts pages).each do |table_name|
+    %w(refinery_page_part_translations refinery_page_translations refinery_page_parts refinery_pages).each do |table_name|
       p "Truncating #{table_name} ..."
       ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
     end
@@ -59,16 +60,12 @@ namespace :wordpress do
     # relationships. This is necessary, as WordPress doesn't dump the pages in
     # a correct order.
     dump.pages(only_published).each do |dump_page|
-      page = ::Page.find(dump_page.post_id)
+      page = Refinery::Page.find(dump_page.post_id)
       page.parent_id = dump_page.parent_id
       page.save!
     end
 
     Refinery::WordPress::Post.create_blog_page_if_necessary
-
-    ENV["MODEL"] = 'Page'
-    Rake::Task["friendly_id:redo_slugs"].invoke
-    ENV.delete("MODEL")
   end
 
   desc "reset cms tables and then import cms data from a WordPress XML dump"
@@ -83,7 +80,7 @@ namespace :wordpress do
   task :reset_media do
     Rake::Task["environment"].invoke
 
-    %w(images resources).each do |table_name|
+    %w(refinery_images refinery_resources).each do |table_name|
       p "Truncating #{table_name} ..."
       ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
     end
