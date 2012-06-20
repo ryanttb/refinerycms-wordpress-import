@@ -18,7 +18,7 @@ describe Refinery::WordPress::Attachment, :type => :model do
       end
 
       it "should create an Image from the Attachment" do
-        @image.should be_a(Image)
+        @image.should be_a(Refinery::Image)
       end
 
       it "should copy the attributes from Attachment" do
@@ -28,7 +28,7 @@ describe Refinery::WordPress::Attachment, :type => :model do
     end
 
     describe "#replace_url" do
-      let(:post) { BlogPost.first }
+      let(:post) { Refinery::Blog::Post.first }
 
       before do
         test_dump.authors.each(&:to_refinery)
@@ -63,8 +63,8 @@ describe Refinery::WordPress::Attachment, :type => :model do
         @resource = attachment.to_refinery
       end
 
-      specify { Resource.should have(1).record }
-      specify { @resource.should be_a(Resource) }
+      specify { Refinery::Resource.should have(1).record }
+      specify { @resource.should be_a(Refinery::Resource) }
 
       it "should copy the attributes from Attachment" do
         @resource.created_at.should == attachment.post_date
@@ -74,7 +74,7 @@ describe Refinery::WordPress::Attachment, :type => :model do
     end
 
     describe '#replace_resource_url' do
-      let(:page_part) { Page.last.parts.first }
+      let(:page_part) { Refinery::Page.last.parts.first }
 
       before do
         test_dump.pages.each(&:to_refinery)

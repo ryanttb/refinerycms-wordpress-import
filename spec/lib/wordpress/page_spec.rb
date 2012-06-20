@@ -20,16 +20,16 @@ describe Refinery::WordPress::Page, :type => :model do
     include ::ActionView::Helpers::TextHelper
 
     before do
-      # "About me" has a parent page with id 8 in the XML  dump, 
+      # "About me" has a parent page with id 8 in the XML  dump,
       # would otherwise fails creation
-      Page.create! :id => 8, :title => 'About'
+      Refinery::Page.create! :id => 8, :title => 'About'
 
-      @count = Page.count
+      @count = Refinery::Page.count
       @page = page.to_refinery
     end
 
     it "should create a Page object" do
-      Page.should have(@count + 1).record
+      Refinery::Page.should have(@count + 1).record
     end
 
     it "should copy the attributes from Refinery::WordPress::Page" do

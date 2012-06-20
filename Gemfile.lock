@@ -290,6 +290,7 @@ DEPENDENCIES
   rb-fsevent (>= 0.3.9)
   rb-notifu (~> 0.0.4)
   refinerycms (~> 2.0.0)
+  refinerycms-authentication (~> 2.0.0)
   refinerycms-blog (~> 2.0.4)
   refinerycms-testing (~> 2.0.5)
   refinerycms-wordpress-import!

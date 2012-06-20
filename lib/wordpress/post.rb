@@ -31,7 +31,7 @@ module Refinery
       end
 
       def to_refinery
-        user = ::Refinery::User.find_by_login(creator) || ::Refinery::User.first
+        user = ::Refinery::User.find_by_email(creator) || ::Refinery::User.first
         raise "Referenced User doesn't exist! Make sure the authors are imported first." \
           unless user
 

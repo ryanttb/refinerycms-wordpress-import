@@ -4,6 +4,7 @@ gemspec
 
 gem 'refinerycms', '~> 2.0.0'
 gem 'refinerycms-blog', '~> 2.0.4'
+gem 'refinerycms-authentication', '~> 2.0.0'
 
 # Refinery/rails should pull in the proper versions of these
 group :assets do

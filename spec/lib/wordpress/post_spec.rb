@@ -48,12 +48,12 @@ describe Refinery::WordPress::Post, :type => :model do
        specify { comment.should == post.comments.last }
 
       describe "#to_refinery" do
-        before do 
+        before do
           @comment = comment.to_refinery
         end
 
         it "should not save the comment, only initialize it" do
-          BlogComment.should have(0).records
+          Refinery::Blog::Comment.should have(0).records
           @comment.should be_new_record
         end
 
@@ -71,16 +71,16 @@ describe Refinery::WordPress::Post, :type => :model do
 
   describe "#to_refinery" do
     before do
-      @user = User.create! :username => 'admin', :email => 'admin@example.com',
+      @user = Refinery::User.create! :username => 'admin', :email => 'admin@example.com',
         :password => 'password', :password_confirmation => 'password'
     end
 
     context "with a unique title" do
-      before do 
+      before do
         @post = post.to_refinery
       end
 
-      specify { BlogPost.should have(1).record }
+      specify { Refinery::Blog::Post.should have(1).record }
 
       specify { @post.title.should == post.title }
       specify { @post.body.should == post.content_formatted }
@@ -99,12 +99,12 @@ describe Refinery::WordPress::Post, :type => :model do
 
     context "with a duplicate title" do
       before do
-        BlogPost.create! :title => post.title, :body => 'Lorem', :author => @user
+        Refinery::Blog::Post.create! :title => post.title, :body => 'Lorem', :author => @user
         @post = post.to_refinery
 
       end
 
-       specify { BlogPost.should have(2).records } 
+       specify { Refinery::Blog::Post.should have(2).records }
 
       it "should create the BlogPost with #post_id attached" do
         @post.title.should == "#{post.title}-#{post.post_id}"

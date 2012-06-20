@@ -24,10 +24,10 @@ module Refinery
       end
 
       def to_refinery
-        user = Refinery::User.find_for_database_authentication(:login => login, :email => email)
-        unless user
-          user = Refinery::User.new(:login => login, :email => email, :password => 'password', :password_confirmation => 'password')
-          user.save
+        user = Refinery::User.first_or_initialize(:username => login, :email => email)
+        if user.new_record?
+          user.password = user.password_confirmation = 'password'
+          user.save!
         end
         user
       end
