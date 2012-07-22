@@ -25,11 +25,11 @@ module Refinery
       end
 
       def meta_keywords
-        node.xpath('//wp:postmeta[wp:meta_key="_msp_keywords"]/meta_value').first.content
+        node.xpath('wp:postmeta[wp:meta_key="_msp_keywords"]/meta_value').first.content
       end
 
       def meta_description
-        node.xpath('//wp:postmeta[wp:meta_key="_msp_description"]/meta_value').first.content
+        node.xpath('wp:postmeta[wp:meta_key="_msp_description"]/meta_value').first.content
       end
 
       def comments
