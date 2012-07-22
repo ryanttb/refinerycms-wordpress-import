@@ -11,6 +11,8 @@ describe Refinery::WordPress::Post, :type => :model do
    specify { post.post_id.should == 6 }
    specify { post.parent_id.should == nil }
    specify { post.status.should == 'publish' }
+   specify { post.meta_keywords.should == 'key1, key2, key3' }
+   specify { post.meta_description.should == 'meta description' }
 
    specify { post.should == test_dump.posts.last }
    specify { post.should_not == test_dump.posts.first }
@@ -87,6 +89,8 @@ describe Refinery::WordPress::Post, :type => :model do
       specify { @post.draft.should == post.draft? }
       specify { @post.published_at.should == post.post_date }
       specify { @post.author.username.should == post.creator }
+      specify { @post.meta_keywords.should == post.meta_keywords }
+      specify { @post.meta_description.should == post.meta_description }
 
       it "should assign a category for each Refinery::WordPress::Category" do
         @post.categories.should have(post.categories.count).records

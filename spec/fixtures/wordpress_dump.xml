@@ -73,6 +73,14 @@
 			<wp:meta_key>_edit_last</wp:meta_key>
 			<wp:meta_value><![CDATA[1]]></wp:meta_value>
 		</wp:postmeta>
+    <wp:postmeta>
+			<wp:meta_key>_msp_keywords</wp:meta_key>
+			<wp:meta_value><![CDATA[key1, key2, key3]]></wp:meta_value>
+		</wp:postmeta>
+		<wp:postmeta>
+			<wp:meta_key>_msp_description</wp:meta_key>
+			<wp:meta_value><![CDATA[meta description]]></wp:meta_value>
+		</wp:postmeta>
 		<wp:comment>
 			<wp:comment_id>1</wp:comment_id>
 			<wp:comment_author><![CDATA[Mr WordPress]]></wp:comment_author>
