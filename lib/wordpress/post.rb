@@ -24,6 +24,14 @@ module Refinery
         end
       end
 
+      def meta_keywords
+        node.xpath('//wp:postmeta[wp:meta_key="_msp_keywords"]/meta_value').first.content
+      end
+
+      def meta_description
+        node.xpath('//wp:postmeta[wp:meta_key="_msp_description"]/meta_value').first.content
+      end
+
       def comments
         node.xpath("wp:comment").collect do |comment_node|
           Comment.new(comment_node)
@@ -38,7 +46,7 @@ module Refinery
         begin
           post = ::Refinery::Blog::Post.new :title => title, :body => content_formatted,
             :draft => draft?, :published_at => post_date,
-            :user_id => user.id, :tag_list => tag_list
+            :user_id => user.id, :tag_list => tag_list, :meta_keywords => meta_keywords, :meta_desription => meta_description
           post.created_at = post_date
           post.save!
 
