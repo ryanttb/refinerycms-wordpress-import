@@ -26,7 +26,7 @@ module Refinery
 
       def meta_description
         if node.xpath('//wp:postmeta[wp:meta_key="_msp_description"]/wp:meta_value').count > 0
-          node.xpath('//wp:postmeta[wp:meta_key="_msp_description"]/wp:meta_value').first.content 
+          node.xpath('//wp:postmeta[wp:meta_key="_msp_description"]/wp:meta_value').first.content
         end
       end
 
@@ -37,7 +37,7 @@ module Refinery
       end
 
       def to_refinery
-        user = ::Refinery::User.find_by_email(creator) || ::Refinery::User.first
+        user = ::Refinery::User.where("lower(username) = ?", creator.downcase).try(:first) || ::Refinery::User.first
         raise "Referenced User doesn't exist! Make sure the authors are imported first." \
           unless user
 
