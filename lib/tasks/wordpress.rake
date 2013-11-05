@@ -5,9 +5,9 @@ namespace :wordpress do
   task :reset_blog do
     Rake::Task["environment"].invoke
 
-    %w(taggings tags refinery_blog_comments refinery_blog_categories refinery_blog_categories_blog_posts refinery_blog_posts).each do |table_name|
+    %w(taggings tags refinery_blog_comments refinery_blog_categories refinery_blog_categories_blog_posts refinery_blog_posts refinery_blog_category_translations refinery_blog_post_translations).each do |table_name|
       p "Truncating #{table_name} ..."
-      ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
+      ActiveRecord::Base.connection.execute "TRUNCATE #{table_name}"
     end
 
   end
@@ -44,7 +44,7 @@ namespace :wordpress do
 
     %w(refinery_page_part_translations refinery_page_translations refinery_page_parts refinery_pages).each do |table_name|
       p "Truncating #{table_name} ..."
-      ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
+      ActiveRecord::Base.connection.execute "TRUNCATE #{table_name}"
     end
   end
 
@@ -82,7 +82,7 @@ namespace :wordpress do
 
     %w(refinery_images refinery_resources).each do |table_name|
       p "Truncating #{table_name} ..."
-      ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
+      ActiveRecord::Base.connection.execute "TRUNCATE #{table_name}"
     end
   end
 
