@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'refinerycms-core', '~> 2.1.5'
   s.add_dependency 'refinerycms-blog', '~> 2.1.0'
-  s.add_dependency 'nokogiri', '~> 1.5.0'
+  s.add_dependency 'nokogiri', '~> 1.6.6'
 
   s.files = Dir["{app,lib,config}/**/*"] + ["MIT-LICENSE", "Rakefile", "Gemfile", "README.rdoc"]
 end
