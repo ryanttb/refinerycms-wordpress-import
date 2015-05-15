@@ -12,13 +12,9 @@ Gem::Specification.new do |s|
   s.email       = 'marc.remolt@googlemail.com'
   s.homepage    = 'https://github.com/mremolt/refinerycms-wordpress-import'
 
-  s.add_dependency 'refinerycms-core', '~> 2.0.5'
-  s.add_dependency 'refinerycms-blog', '~> 2.0.4'
+  s.add_dependency 'refinerycms-core', '~> 2.1.5'
+  s.add_dependency 'refinerycms-blog', '~> 2.1.0'
   s.add_dependency 'nokogiri', '~> 1.5.0'
-
-  # Development dependencies (usually used for testing)
-  s.add_development_dependency 'refinerycms-testing', '~> 2.0.3'
-  s.add_development_dependency 'database_cleaner'
 
   s.files = Dir["{app,lib,config}/**/*"] + ["MIT-LICENSE", "Rakefile", "Gemfile", "README.rdoc"]
 end
