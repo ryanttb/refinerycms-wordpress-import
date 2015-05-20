@@ -48,11 +48,7 @@ module Refinery
           unless user
 
         begin
-          post = ::Refinery::Blog::Post.new :title => title, :body => content_formatted,
-            :draft => draft?, :published_at => post_date,
-            :user_id => user.id, :tag_list => tag_list
-          post.meta_keywords = meta_keywords
-          post.meta_description = meta_description
+          post = ::Refinery::Blog::Post.new :title => title, :body => content_formatted, :draft => draft?, :published_at => post_date, :user_id => user.id, :tag_list => tag_list
           post.created_at = post_date
           post.save!
 
