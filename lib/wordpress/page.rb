@@ -18,6 +18,22 @@ module Refinery
         node.xpath("title").text
       end
 
+      def excerpt
+        node.xpath("excerpt:encoded").text
+      end
+
+      def excerpt_formatted
+        formatted = format_syntax_highlighter(format_paragraphs(excerpt))
+
+        # remove all tags inside <pre> that simple_format created
+        # TODO: replace format_paragraphs with a method, that ignores pre-tags
+        formatted.gsub!(/(<pre.*?>)(.+?)(<\/pre>)/m) do |match|
+          "#{$1}#{strip_tags($2)}#{$3}"
+        end
+
+        formatted
+      end
+
       def content
         node.xpath("content:encoded").text
       end
