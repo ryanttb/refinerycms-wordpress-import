@@ -4,12 +4,10 @@ module Refinery
       include ::ActionView::Helpers::TagHelper
       include ::ActionView::Helpers::TextHelper
 
-      attr_reader :node, :links
+      attr_reader :node
 
       def initialize(node)
         @node = node
-
-        @links = { }
       end
 
       def inspect
