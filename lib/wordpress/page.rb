@@ -23,7 +23,7 @@ module Refinery
       end
 
       def excerpt_formatted
-        formatted = format_syntax_highlighter(format_paragraphs(excerpt))
+        formatted = format_syntax_highlighter(format_captions(format_paragraphs(excerpt)))
 
         # remove all tags inside <pre> that simple_format created
         # TODO: replace format_paragraphs with a method, that ignores pre-tags
@@ -117,6 +117,24 @@ module Refinery
         # [ruby]p "Hello World"[/ruby]
         # -> <pre class="brush: ruby">p "Hello world"</pre>
         text.gsub(/\[(\w+)\](.+?)\[\/\1\]/m, '<pre class="brush: \1">\2</pre>')
+      end
+
+      def format_captions(text)
+        # Examples:
+        # [caption id="attachment_99" align="aligncenter" width="400"]<img src="" /> Hello World[/caption]
+        # -> <div class="caption"><img src="" /> <span class="caption-text">Hello world</span></div>
+        #
+        # [caption id="attachment_99" align="aligncenter" width="400"]<a href=""><img src="" /></a> Hello World[/caption]
+        # -> <div class="caption"><a href=""><img src="" /></a> <span class="caption-text">Hello world</span></div>
+        caption = text.match( /\[caption .+\].+\[\/caption\]/ )
+        if caption.present?
+          caption.gsub!( /\[caption (.+?)\]/, '<div class="caption" \1>' )
+          caption.gsub!( /align="(.+?)"/, 'data-align="\1"' )
+          caption.gsub!( /width="(.+?)"/, 'style="width: \1px"' )
+          caption.gsub!( / \/> /, ' /> <span class="caption-text">' )
+          caption.gsub!( /\[\/caption\]/, '</span></div>' )
+          text.gsub!( /\[caption .+\].+\[\/caption\]/, caption ).html_safe
+        end
       end
     end
   end
