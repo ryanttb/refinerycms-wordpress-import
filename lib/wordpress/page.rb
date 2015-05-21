@@ -126,19 +126,40 @@ module Refinery
         #
         # [caption id="attachment_99" align="aligncenter" width="400"]<a href=""><img src="" /></a> Hello World[/caption]
         # -> <div class="caption"><a href=""><img src="" /></a> <span class="caption-text">Hello world</span></div>
-        caption = text.match( /\[caption .+\].+\[\/caption\]/ )
-        if caption.present?
-          caption = caption[0]
-          caption.gsub!( /\[caption (.+?)\]/, '<div class="caption" \1>' )
-          caption.gsub!( /align="(.+?)"/, 'data-align="\1"' )
-          caption.gsub!( /width="(.+?)"/, 'style="width: \1px"' )
-          caption.gsub!( / \/> /, ' /> <span class="caption-text">' )
-          caption.gsub!( /\[\/caption\]/, '</span></div>' )
 
-          text.gsub( /\[caption .+\].+\[\/caption\]/, caption )
-        else
-          text
-        end
+        caption = text.scan( /\[caption .+?\].+?\[\/caption\]/m )
+
+        caption.each { |c|
+
+          cup = c.dup
+          cup.gsub!( /\[caption (.+?)\]/, '<div class="caption" \1>' )
+          cup.gsub!( /align="(.+?)"/, 'data-align="\1"' )
+          cup.gsub!( /width="(.+?)"/, 'style="width: \1px"' )
+          cup.gsub!( / \/> /, ' /> <span class="caption-text">' )
+          cup.gsub!( /\[\/caption\]/, '</span></div>' )
+
+          #puts "#{c} =>\n #{cup}"
+          text[ c ] = cup
+        }
+
+        text
+
+
+
+
+#        caption = text.match( /\[caption .+\].+\[\/caption\]/m )
+#        if caption.present?
+#          caption = caption[0]
+#          caption.gsub!( /\[caption (.+?)\]/, '<div class="caption" \1>' )
+#          caption.gsub!( /align="(.+?)"/, 'data-align="\1"' )
+#          caption.gsub!( /width="(.+?)"/, 'style="width: \1px"' )
+#          caption.gsub!( / \/> /, ' /> <span class="caption-text">' )
+#          caption.gsub!( /\[\/caption\]/, '</span></div>' )
+#
+#          text.gsub( /\[caption .+\].+\[\/caption\]/, caption )
+#        else
+#          text
+#        end
       end
     end
   end
