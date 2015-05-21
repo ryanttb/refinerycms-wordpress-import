@@ -52,7 +52,7 @@ module Refinery
           post.created_at = post_date
           post.save!
           @links[ link ] = post.slug
-          puts links
+          puts @links
 
           ::Refinery::Blog::Post.transaction do
             categories.each do |category|
