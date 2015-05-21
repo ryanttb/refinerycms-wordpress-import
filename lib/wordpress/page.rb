@@ -23,7 +23,7 @@ module Refinery
       end
 
       def excerpt_formatted
-        formatted = format_syntax_highlighter(format_captions(format_paragraphs(excerpt)))
+        formatted = format_syntax_highlighter(format_paragraphs(excerpt))
 
         # remove all tags inside <pre> that simple_format created
         # TODO: replace format_paragraphs with a method, that ignores pre-tags
@@ -39,7 +39,7 @@ module Refinery
       end
 
       def content_formatted
-        formatted = format_syntax_highlighter(format_paragraphs(content))
+        formatted = format_syntax_highlighter(format_captions(format_paragraphs(content)))
 
         # remove all tags inside <pre> that simple_format created
         # TODO: replace format_paragraphs with a method, that ignores pre-tags
