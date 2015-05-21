@@ -8,6 +8,8 @@ module Refinery
 
       def initialize(node)
         @node = node
+
+        @links = { }
       end
 
       def inspect
