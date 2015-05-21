@@ -128,6 +128,7 @@ module Refinery
         # -> <div class="caption"><a href=""><img src="" /></a> <span class="caption-text">Hello world</span></div>
         caption = text.match( /\[caption .+\].+\[\/caption\]/ )
         if caption.present?
+          caption = caption[0]
           caption.gsub!( /\[caption (.+?)\]/, '<div class="caption" \1>' )
           caption.gsub!( /align="(.+?)"/, 'data-align="\1"' )
           caption.gsub!( /width="(.+?)"/, 'style="width: \1px"' )
