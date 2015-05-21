@@ -134,9 +134,11 @@ module Refinery
           caption.gsub!( /width="(.+?)"/, 'style="width: \1px"' )
           caption.gsub!( / \/> /, ' /> <span class="caption-text">' )
           caption.gsub!( /\[\/caption\]/, '</span></div>' )
-          text.gsub!( /\[caption .+\].+\[\/caption\]/, caption )
+
+          text.gsub( /\[caption .+\].+\[\/caption\]/, caption )
+        else
+          text
         end
-        text
       end
     end
   end
