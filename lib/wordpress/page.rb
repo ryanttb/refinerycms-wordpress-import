@@ -4,7 +4,7 @@ module Refinery
       include ::ActionView::Helpers::TagHelper
       include ::ActionView::Helpers::TextHelper
 
-      attr_reader :node
+      attr_reader :node, :links
 
       def initialize(node)
         @node = node
