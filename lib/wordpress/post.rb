@@ -48,7 +48,7 @@ module Refinery
           unless user
 
         begin
-          post = ::Refinery::Blog::Post.new :title => title, :custom_teaser => excerpt_formatted, :body => content_formatted, :draft => draft?, :published_at => post_date, :user_id => user.id, :tag_list => tag_list
+          post = ::Refinery::Blog::Post.new :title => title, :custom_teaser => excerpt_formatted, :body => content_formatted, :draft => draft?, :published_at => post_date, :user_id => user.id, :tag_list => tag_list, source_url => link
           post.created_at = post_date
           post.save!
 
