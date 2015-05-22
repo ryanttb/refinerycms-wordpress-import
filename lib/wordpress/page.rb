@@ -43,7 +43,7 @@ module Refinery
       end
 
       def content_formatted
-        formatted = format_syntax_highlighter(format_captions(format_paragraphs(content)))
+        formatted = format_syntax_highlighter(format_captions(format_paragraphs(remap_urls(content))))
 
         # remove all tags inside <pre> that simple_format created
         # TODO: replace format_paragraphs with a method, that ignores pre-tags
@@ -142,6 +142,25 @@ module Refinery
           cup.gsub!( /\[\/caption\]/, '</span></div>' )
 
           text[ c ] = cup
+        }
+
+        text
+      end
+
+      def remap_urls(text)
+        # Remap internal blog post urls from old wordpress links to new refinery post links
+
+        links = text.scan( /href="(.+?)"/ )
+
+        links.each { |l|
+          if l[0].match( /internetmonitor/ )
+            p = Refinery::Blog::Post.find_by_source_url l[0]
+            if p.present?
+              lup = Refinery::Core::Engine.routes.url_helpers.blog_post_path p
+              puts "#{l[0]} => #{lup}"
+              text[ l[0] ] = lup
+            end
+          end
         }
 
         text

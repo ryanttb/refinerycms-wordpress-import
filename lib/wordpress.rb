@@ -3,8 +3,6 @@ require "wordpress/railtie"
 
 module Refinery
   module WordPress
-    @links = { }
-
     autoload :Author, 'wordpress/author' 
     autoload :Tag, 'wordpress/tag'
     autoload :Category, 'wordpress/category'
