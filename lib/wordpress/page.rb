@@ -157,7 +157,6 @@ module Refinery
             p = Refinery::Blog::Post.find_by_source_url l[0]
             if p.present?
               lup = Refinery::Core::Engine.routes.url_helpers.blog_post_path p
-              puts "#{l[0]} => #{lup}"
               text[ l[0] ] = lup
             end
           end
