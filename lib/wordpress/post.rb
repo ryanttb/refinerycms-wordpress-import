@@ -52,6 +52,8 @@ module Refinery
           post.created_at = post_date
           post.save!
 
+          @body_part = post
+
           ::Refinery::Blog::Post.transaction do
             categories.each do |category|
               post.categories << category.to_refinery
