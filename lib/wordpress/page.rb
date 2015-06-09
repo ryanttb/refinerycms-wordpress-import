@@ -4,10 +4,13 @@ module Refinery
       include ::ActionView::Helpers::TagHelper
       include ::ActionView::Helpers::TextHelper
 
+      attr_reader :dump
       attr_reader :node
+      attr_reader :body_part
 
-      def initialize(node)
+      def initialize(node, dump = nil)
         @node = node
+        @dump = dump
       end
 
       def inspect
@@ -43,7 +46,7 @@ module Refinery
       end
 
       def content_formatted
-        formatted = format_syntax_highlighter(format_captions(format_paragraphs(remap_urls(content))))
+        formatted = format_syntax_highlighter(format_captions(format_paragraphs(content)))
 
         # remove all tags inside <pre> that simple_format created
         # TODO: replace format_paragraphs with a method, that ignores pre-tags
@@ -91,8 +94,32 @@ module Refinery
         page = Refinery::Page.create!(:id => post_id, :title => title,
           :created_at => post_date, :draft => draft?)
 
-        page.parts.create(:title => 'Body', :body => content_formatted)
+        @body_part = page.parts.create(:title => 'Body', :body => content_formatted)
         page
+      end
+
+      def remap_urls
+        # Remap internal blog post urls from old wordpress links to new refinery post links
+
+        text = body_part.body.clone
+        links = text.scan( /href="(.+?)"/ )
+        updated? = false
+
+        links.each { |l|
+          if l[0].start_with?( dump.base_blog_url )
+            p = Refinery::Blog::Post.find_by_source_url l[0]
+            if p.present?
+              lup = Refinery::Core::Engine.routes.url_helpers.blog_post_path p
+              text[ l[0] ] = lup
+              updated? = true
+            end
+          end
+        }
+
+        if updated?
+          body_part.body = text
+          body_part.save
+        end
       end
 
       private
@@ -142,24 +169,6 @@ module Refinery
           cup.gsub!( /\[\/caption\]/, '</span></div>' )
 
           text[ c ] = cup
-        }
-
-        text
-      end
-
-      def remap_urls(text)
-        # Remap internal blog post urls from old wordpress links to new refinery post links
-
-        links = text.scan( /href="(.+?)"/ )
-
-        links.each { |l|
-          if l[0].match( /internetmonitor/ )
-            p = Refinery::Blog::Post.find_by_source_url l[0]
-            if p.present?
-              lup = Refinery::Core::Engine.routes.url_helpers.blog_post_path p
-              text[ l[0] ] = lup
-            end
-          end
         }
 
         text

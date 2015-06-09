@@ -15,6 +15,10 @@ module Refinery
         @doc = Nokogiri::XML(file)
       end
 
+      def base_blog_url
+        doc.xpath("//wp:base_blog_url").text
+      end
+
       def authors
         doc.xpath("//wp:author").collect do |author|
           Author.new(author)
@@ -23,7 +27,7 @@ module Refinery
 
       def pages(only_published=false)
         pages = doc.xpath("//item[wp:post_type = 'page']").collect do |page|
-          Page.new(page)
+          Page.new(page, self)
         end
 
         pages = pages.select(&:published?) if only_published
@@ -32,7 +36,7 @@ module Refinery
 
       def posts(only_published=false)
         posts = doc.xpath("//item[wp:post_type = 'post']").collect do |post|
-          Post.new(post)
+          Post.new(post, self)
         end
         posts = posts.select(&:published?) if only_published
         posts

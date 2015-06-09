@@ -25,7 +25,8 @@ namespace :wordpress do
     dump.authors.each(&:to_refinery)
 
     only_published = ENV['ONLY_PUBLISHED'] == 'true' ? true : false
-    dump.posts(only_published).each(&:to_refinery)
+
+    dump.posts(only_published).each(&:to_refinery).each(&:remap_urls)
 
     Refinery::WordPress::Post.create_blog_page_if_necessary
   end
