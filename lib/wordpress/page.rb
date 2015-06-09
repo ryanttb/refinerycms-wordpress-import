@@ -103,7 +103,7 @@ module Refinery
 
         text = body_part.body.clone
         links = text.scan( /href="(.+?)"/ )
-        updated? = false
+        updated = false
 
         links.each { |l|
           if l[0].start_with?( dump.base_blog_url )
@@ -111,12 +111,12 @@ module Refinery
             if p.present?
               lup = Refinery::Core::Engine.routes.url_helpers.blog_post_path p
               text[ l[0] ] = lup
-              updated? = true
+              updated = true
             end
           end
         }
 
-        if updated?
+        if updated
           body_part.body = text
           body_part.save
         end
