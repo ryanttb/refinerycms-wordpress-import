@@ -1,3 +1,5 @@
+require 'open-uri'
+
 module Refinery
   module WordPress
     class Page
@@ -113,6 +115,36 @@ module Refinery
               text[ l[0] ] = lup
               updated = true
             end
+          end
+        }
+
+        if updated
+          body_part.body = text
+          body_part.save
+        end
+      end
+
+      def remap_images
+        # Copy & remap internal blog post images from old wordpress pages to new refinery page images
+        # http://blogs.law.harvard.edu/internetmonitor/files/2013/06/tank-man1-300x198.jpg =>
+        # public/system/refinery/images/2013/06/tank-man1-300x198.jpg
+
+        text = body_part.body.clone
+        images = text.scan( /src="(.+?)"/ )
+        updated = false
+
+        images.each { |l|
+          if l[0].start_with?( dump.base_blog_url )
+            sup = l[0].gsub /http:\/\/blogs.law.harvard.edu\/internetmonitor\/files/, 'public/system/refinery/images'
+
+
+            FileUtils.mkpath File.dirname( sup )
+            open(sup, 'wb') do |file|
+              file << open(l[0]).read
+            end
+
+            text[ l[0] ] = sup.gsub /^public/, ''
+            updated = true
           end
         }
 
